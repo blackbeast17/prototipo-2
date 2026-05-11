@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>prototipo 2</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════
+       TOPBAR — siempre visible
+  ══════════════════════════ -->
+  <header class="topbar">
+
+    <div class="topbar-logo"></div>
+
+    <!-- Control 1: Localidad -->
+    <div class="topbar-control">
+      <label class="ctrl-label" for="select-localidad">Localidad</label>
+      <div class="ctrl-wrap">
+        <i class="ti ti-map-pin ctrl-icon"></i>
+        <select class="ctrl-select" id="select-localidad">
+          <option value="">Todas las localidades</option>
+          <option value="1">Usaquén</option>
+          <option value="2">Chapinero</option>
+        
+        </select>
+      </div>
+    </div>
+
+    <div class="topbar-sep"></div>
+
+    <!-- Control 2: IED -->
+    <div class="topbar-control">
+      <label class="ctrl-label" for="select-ied">Institución educativa</label>
+      <div class="ctrl-wrap">
+        <i class="ti ti-building-community ctrl-icon"></i>
+        <select class="ctrl-select" id="select-ied" disabled>
+          <option value="">Selecciona una localidad primero</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="topbar-sep"></div>
+
+    <!-- Control 3: Búsqueda -->
+    <div class="topbar-control" style="flex:1.4;">
+      <label class="ctrl-label" for="search-input">Buscar institución</label>
+      <div class="ctrl-wrap search-wrap">
+        <i class="ti ti-search ctrl-icon"></i>
+        <input type="text" class="ctrl-input" id="search-input"
+          placeholder="Nombre del colegio..." autocomplete="off" />
+        <button class="search-clear" id="search-clear" aria-label="Limpiar">
+          <i class="ti ti-x"></i>
+        </button>
+        <ul class="search-dropdown" id="search-dropdown"></ul>
+      </div>
+    </div>
+
+    <!-- Chips -->
+    <div class="topbar-chips" id="active-filters" style="display:none;">
+      <span class="chip" id="chip-localidad" style="display:none;">
+        <i class="ti ti-map-pin"></i>
+        <span id="chip-localidad-text"></span>
+        <button id="chip-localidad-remove"><i class="ti ti-x"></i></button>
+      </span>
+      <span class="chip" id="chip-ied" style="display:none;">
+        <i class="ti ti-building-community"></i>
+        <span id="chip-ied-text"></span>
+        <button id="chip-ied-remove"><i class="ti ti-x"></i></button>
+      </span>
+      <button class="clear-all" id="clear-all">Limpiar</button>
+    </div>
+
+  </header>
+
+  <!-- ══════════════════════════
+       VISTA PRINCIPAL (HOME)
+  ══════════════════════════ -->
+  <div class="view" id="view-home">
+
+    <!-- Bloque superior: mapa + info -->
+    <section class="top-block">
+
+      <div class="map-block">
+        <p class="block-label">Mapa de Bogotá</p>
+        <div class="ph-box map-ph">
+          <span>Mapa interactivo</span>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <p class="block-label" id="info-label">Datos generales</p>
+
+        <!-- Estado vacío -->
+        <div class="info-empty" id="info-empty">
+         
+          <p>Selecciona una localidad o institución<br>para ver su información.</p>
+        </div>
+
+        <!-- Ficha IED -->
+        <div class="info-ficha" id="info-ficha">
+          <div class="ficha-photo ph-box">
+            <span>Imagen institución</span>
+          </div>
+          <div class="ficha-datos">
+            <p class="ficha-nombre" id="ficha-nombre">—</p>
+            <div class="ficha-rows">
+              <div class="ficha-row"><span>Código</span><span id="f-cod">—</span></div>
+              <div class="ficha-row"><span>Localidad</span><span id="f-loc">—</span></div>
+              <div class="ficha-row"><span>Jornada</span><span id="f-jor">—</span></div>
+              <div class="ficha-row"><span>Niveles</span><span id="f-niv">—</span></div>
+              <div class="ficha-row"><span>Rector/a</span><span id="f-rec">—</span></div>
+              <div class="ficha-row"><span>Dirección</span><span id="f-dir">—</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Grid de cards filtro -->
+    <section class="cards-section">
+      <p class="block-label">Seleccionar sección</p>
+      <div class="cards-grid">
+
+        <div class="filter-card" data-section="ied">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Institución</span>
+          <span class="card-sub">General o específica</span>
+        </div>
+
+        <div class="filter-card" data-section="datos">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Estudiantes</span>
+          <span class="card-sub"></span>
+        </div>
+
+        <div class="filter-card" data-section="docentes">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 3</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="reto1">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 4</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="reto2">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 5</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="reto3">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 6</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="ciclo">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 7</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="proyecto">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 8</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="extra1">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 9</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="extra2">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 10</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="extra3">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 11</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+        <div class="filter-card" data-section="extra4">
+          <div class="card-icon ph-box"></div>
+          <span class="card-title">Filtro 12</span>
+          <span class="card-sub">xxxxxxxxxx</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Logos inferiores -->
+    <footer class="page-footer">
+      <div class="footer-logo ph-box"><span>Logo 1</span></div>
+      <div class="footer-logo ph-box"><span>Logo 2</span></div>
+    </footer>
+
+  </div><!-- /view-home -->
+
+  <!-- ══════════════════════════
+       VISTA DE DETALLE (por sección)
+  ══════════════════════════ -->
+  <div class="view" id="view-detalle" style="display:none;">
+
+    <!-- Breadcrumb + botón volver -->
+    <div class="detalle-nav">
+      <button class="btn-volver" id="btn-volver">
+        <i class="ti ti-arrow-left"></i>
+        Volver
+      </button>
+      <div class="breadcrumb-wrap">
+        <span class="bc-home">Inicio</span>
+        <i class="ti ti-chevron-right bc-sep"></i>
+        <span class="bc-current" id="bc-current">Sección</span>
+        <!-- si hay IED -->
+        <span id="bc-ied-wrap" style="display:none;">
+          <i class="ti ti-chevron-right bc-sep"></i>
+          <span class="bc-ied" id="bc-ied">—</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Header de la sección -->
+    <div class="detalle-header">
+      <div class="detalle-header-text">
+        <h1 class="detalle-title" id="detalle-title">Sección</h1>
+        <p class="detalle-sub" id="detalle-sub">Descripción de la sección</p>
+      </div>
+      <!-- Mini ficha de contexto si hay IED seleccionada -->
+      <div class="detalle-context" id="detalle-context" style="display:none;">
+        <i class="ti ti-building-community"></i>
+        <span id="detalle-context-name">—</span>
+      </div>
+    </div>
+
+    <!-- Contenido dinámico por sección -->
+    <div class="detalle-body">
+
+      <div class="sec-content" id="sec-ied">
+        <div class="ph-row">
+          <div class="ph-box ph-tall" style="flex:2;"><span>Mapa / foto institución</span></div>
+          <div class="ph-col">
+            <div class="ph-box"><span>Datos generales</span></div>
+            <div class="ph-box"><span>Indicadores</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-content" id="sec-datos">
+        <div class="ph-col">
+          <div class="ph-box ph-tall"><span>xxxxxxxxxx</span></div>
+          <div class="ph-box"><span>xxxxxxxxxx</span></div>
+        </div>
+      </div>
+
+      <div class="sec-content" id="sec-docentes">
+        <div class="ph-row">
+          <div class="ph-box ph-tall" style="flex:2;"><span>xxxxxxxxxx</span></div>
+          <div class="ph-box ph-tall"><span>xxxxxxxxxx</span></div>
+        </div>
+      </div>
+
+      <div class="sec-content" id="sec-reto1">
+        <div class="ph-box ph-full"><span>xxxxxxxxxx</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-reto2">
+        <div class="ph-box ph-full"><span>xxxxxxxxxx</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-reto3">
+        <div class="ph-box ph-full"><span>Filtro 6</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-ciclo">
+        <div class="ph-box ph-full"><span>Filtro 7</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-proyecto">
+        <div class="ph-box ph-full"><span>Filtro 8</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-extra1">
+        <div class="ph-box ph-full"><span>Filtro 9</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-extra2">
+        <div class="ph-box ph-full"><span>Filtro 10</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-extra3">
+        <div class="ph-box ph-full"><span>Filtro 11</span></div>
+      </div>
+
+      <div class="sec-content" id="sec-extra4">
+        <div class="ph-box ph-full"><span>Filtro 12</span></div>
+      </div>
+
+    </div><!-- /detalle-body -->
+
+  </div><!-- /view-detalle -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+// ── Datos ──
+const IED_POR_LOCALIDAD = {
+  "1": ["Colegio Agustín Fernández (IED)","Colegio Antonio Villavicencio (IED)","Colegio Toberín (IED)"],
+  "2": ["Colegio Liceo Nacional Agustín Nieto Caballero (IED)","Colegio Palermo (IED)"],
+  "3": ["Colegio Externado Nacional Camilo Torres (IED)","Colegio República de Colombia (IED)"],
+  "4": ["Colegio Abel Rodriguez Cespedes (IED)","Colegio Aldemar Rojas Plazas (IED)","Colegio Entre Nubes Sur Oriental (IED)"],
+  "5": ["Colegio Alfonso López Michelsen (IED)","Colegio Brazuelos (IED)","Colegio Carlos Arturo Torres (IED)"],
+  "7": ["Colegio Carlos Pizarro Leongómez (IED)","Colegio El Porvenir (IED)","Colegio Llano Oriental (IED)"],
+  "8": ["Colegio Américas (IED)","Colegio Fernando Mazuera Villegas (IED)","Colegio Rodrigo Lara Bonilla (IED)"],
+  "10":["Colegio Bolivia (IED)","Colegio Gerardo Paredes (IED)","Colegio Tabora (IED)"],
+  "11":["Colegio Chuniza (IED)","Colegio La Gaitana (IED)","Colegio Tibabuyes Universal (IED)"],
+  "19":["Colegio Arborizadora Alta (IED)","Colegio Juan de la Cruz Varela (IED)","Colegio Mochuelo Alto (IED)"]
+};
+
+const LOC_NOMBRES = {
+  "1":"Usaquén","2":"Chapinero","3":"Santa Fe","4":"San Cristóbal",
+  "5":"Usme","6":"Tunjuelito","7":"Bosa","8":"Kennedy","9":"Fontibón",
+  "10":"Engativá","11":"Suba","12":"Barrios Unidos","13":"Teusaquillo",
+  "14":"Los Mártires","15":"Antonio Nariño","16":"Puente Aranda",
+  "17":"La Candelaria","18":"Rafael Uribe Uribe","19":"Ciudad Bolívar","20":"Sumapaz"
+};
+
+const SECTION_INFO = {
+  ied:      { title:"Institución educativa",  sub:"Descripción del filtro 1" },
+  datos:    { title:"Estudiantes",            sub:"Descripción del filtro 2" },
+  docentes: { title:"Filtro 3",              sub:"Descripción del filtro 3" },
+  reto1:    { title:"Filtro 4",              sub:"Descripción del filtro 4" },
+  reto2:    { title:"Filtro 5",              sub:"Descripción del filtro 5" },
+  reto3:    { title:"Filtro 6",              sub:"Descripción del filtro 6" },
+  ciclo:    { title:"Filtro 7",              sub:"Descripción del filtro 7" },
+  proyecto: { title:"Filtro 8",              sub:"Descripción del filtro 8" },
+  extra1:   { title:"Filtro 9",              sub:"Descripción del filtro 9" },
+  extra2:   { title:"Filtro 10",             sub:"Descripción del filtro 10" },
+  extra3:   { title:"Filtro 11",             sub:"Descripción del filtro 11" },
+  extra4:   { title:"Filtro 12",             sub:"Descripción del filtro 12" },
+};
+
+// ── DOM ──
+const selLoc      = document.getElementById('select-localidad');
+const selIed      = document.getElementById('select-ied');
+const searchInput = document.getElementById('search-input');
+const searchClear = document.getElementById('search-clear');
+const dropdown    = document.getElementById('search-dropdown');
+const activeFilts = document.getElementById('active-filters');
+const chipLoc     = document.getElementById('chip-localidad');
+const chipLocTxt  = document.getElementById('chip-localidad-text');
+const chipLocRm   = document.getElementById('chip-localidad-remove');
+const chipIed     = document.getElementById('chip-ied');
+const chipIedTxt  = document.getElementById('chip-ied-text');
+const chipIedRm   = document.getElementById('chip-ied-remove');
+const clearAllBtn = document.getElementById('clear-all');
+const infoEmpty   = document.getElementById('info-empty');
+const infoFicha   = document.getElementById('info-ficha');
+const viewHome    = document.getElementById('view-home');
+const viewDetalle = document.getElementById('view-detalle');
+const btnVolver   = document.getElementById('btn-volver');
+
+// ── Navegación entre vistas ──
+function irASeccion(sec) {
+  // Ocultar todos los contenidos de sección
+  document.querySelectorAll('.sec-content').forEach(el => el.style.display = 'none');
+  const target = document.getElementById('sec-' + sec);
+  if (target) target.style.display = 'flex';
+
+  // Llenar header de detalle
+  const info = SECTION_INFO[sec] || { title: sec, sub: '' };
+  document.getElementById('detalle-title').textContent = info.title;
+  document.getElementById('detalle-sub').textContent   = info.sub;
+  document.getElementById('bc-current').textContent    = info.title;
+
+  // Contexto IED en el header si hay una seleccionada
+  const nombreIed = selIed.value;
+  const ctxWrap   = document.getElementById('detalle-context');
+  const bcIedWrap = document.getElementById('bc-ied-wrap');
+  if (nombreIed) {
+    document.getElementById('detalle-context-name').textContent = nombreIed;
+    document.getElementById('bc-ied').textContent = nombreIed;
+    ctxWrap.style.display  = 'flex';
+    bcIedWrap.style.display = 'inline';
+  } else {
+    ctxWrap.style.display  = 'none';
+    bcIedWrap.style.display = 'none';
+  }
+
+  // Cambiar vistas con animación
+  viewHome.classList.add('view-exit');
+  setTimeout(function() {
+    viewHome.style.display    = 'none';
+    viewHome.classList.remove('view-exit');
+    viewDetalle.style.display = 'flex';
+    viewDetalle.classList.add('view-enter');
+    setTimeout(() => viewDetalle.classList.remove('view-enter'), 250);
+  }, 180);
+}
+
+function volverAHome() {
+  viewDetalle.classList.add('view-exit');
+  setTimeout(function() {
+    viewDetalle.style.display = 'none';
+    viewDetalle.classList.remove('view-exit');
+    viewHome.style.display    = 'flex';
+    viewHome.classList.add('view-enter');
+    setTimeout(() => viewHome.classList.remove('view-enter'), 250);
+  }, 180);
+}
+
+// Cards
+document.querySelectorAll('.filter-card').forEach(function(card) {
+  card.addEventListener('click', function() {
+    document.querySelectorAll('.filter-card').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+    irASeccion(this.dataset.section);
+  });
+});
+
+// Botón volver
+btnVolver.addEventListener('click', volverAHome);
+
+// ── Ficha IED ──
+function mostrarFichaIED(nombre, locId) {
+  infoEmpty.style.display = 'none';
+  infoFicha.style.display = 'flex';
+  document.getElementById('ficha-nombre').textContent = nombre;
+  document.getElementById('f-cod').textContent = 'xxxxxx';
+  document.getElementById('f-loc').textContent = LOC_NOMBRES[locId] || '—';
+  document.getElementById('f-jor').textContent = 'xxxxxx';
+  document.getElementById('f-niv').textContent = 'xxxxxx';
+  document.getElementById('f-rec').textContent = 'xxxxxx';
+  document.getElementById('f-dir').textContent = 'xxxxxx';
+}
+function ocultarFichaIED() {
+  infoEmpty.style.display = 'flex';
+  infoFicha.style.display = 'none';
+}
+
+// ── Chips ──
+function actualizarChips() {
+  const lv = selLoc.value;
+  const lt = selLoc.options[selLoc.selectedIndex]?.text || '';
+  const iv = selIed.value;
+  const it = selIed.options[selIed.selectedIndex]?.text || '';
+  chipLocTxt.textContent = lt;
+  chipLoc.style.display  = lv ? 'inline-flex' : 'none';
+  chipIedTxt.textContent = it;
+  chipIed.style.display  = iv ? 'inline-flex' : 'none';
+  activeFilts.style.display = (lv || iv) ? 'flex' : 'none';
+}
+
+// ── Localidad ──
+selLoc.addEventListener('change', function() {
+  const val  = this.value;
+  const ieds = IED_POR_LOCALIDAD[val] || [];
+  selIed.innerHTML = '';
+  if (!val) {
+    selIed.innerHTML = '<option value="">Selecciona una localidad primero</option>';
+    selIed.disabled  = true;
+    ocultarFichaIED();
+  } else if (!ieds.length) {
+    selIed.innerHTML = '<option value="">Sin IED registradas</option>';
+    selIed.disabled  = true;
+  } else {
+    const d = document.createElement('option'); d.value=''; d.textContent='Todas las IED';
+    selIed.appendChild(d);
+    ieds.forEach(function(n) {
+      const o = document.createElement('option'); o.value=n; o.textContent=n;
+      selIed.appendChild(o);
+    });
+    selIed.disabled = false;
+  }
+  actualizarChips();
+});
+
+// ── IED ──
+selIed.addEventListener('change', function() {
+  if (this.value) mostrarFichaIED(this.value, selLoc.value);
+  else ocultarFichaIED();
+  actualizarChips();
+});
+
+// ── Chips remove ──
+chipLocRm.addEventListener('click', function() {
+  selLoc.value = '';
+  selIed.innerHTML = '<option value="">Selecciona una localidad primero</option>';
+  selIed.disabled  = true;
+  ocultarFichaIED(); actualizarChips();
+});
+chipIedRm.addEventListener('click', function() {
+  selIed.value = ''; ocultarFichaIED(); actualizarChips();
+});
+clearAllBtn.addEventListener('click', function() {
+  selLoc.value = '';
+  selIed.innerHTML = '<option value="">Selecciona una localidad primero</option>';
+  selIed.disabled  = true;
+  searchInput.value = ''; searchClear.classList.remove('visible');
+  cerrarDropdown(); ocultarFichaIED(); actualizarChips();
+});
+
+// ── Buscador ──
+const todasIED = [];
+Object.entries(IED_POR_LOCALIDAD).forEach(function([locId, ieds]) {
+  ieds.forEach(function(nombre) {
+    todasIED.push({ nombre, localidad: LOC_NOMBRES[locId], locId });
+  });
+});
+
+function mostrarDropdown(res) {
+  dropdown.innerHTML = '';
+  if (!res.length) {
+    dropdown.innerHTML = '<li class="dd-empty">Sin resultados</li>';
+  } else {
+    res.forEach(function(item) {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="dd-name">${item.nombre}</span><span class="dd-loc">${item.localidad}</span>`;
+      li.addEventListener('click', function() {
+        selLoc.value = item.locId;
+        selLoc.dispatchEvent(new Event('change'));
+        setTimeout(function() {
+          selIed.value = item.nombre;
+          selIed.dispatchEvent(new Event('change'));
+        }, 50);
+        searchInput.value = item.nombre;
+        cerrarDropdown();
+      });
+      dropdown.appendChild(li);
+    });
+  }
+  dropdown.style.display = 'block';
+}
+function cerrarDropdown() { dropdown.style.display = 'none'; }
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  searchClear.classList.toggle('visible', this.value.length > 0);
+  if (q.length < 2) { cerrarDropdown(); return; }
+  mostrarDropdown(todasIED.filter(i => i.nombre.toLowerCase().includes(q)));
+});
+searchClear.addEventListener('click', function() {
+  searchInput.value = ''; searchClear.classList.remove('visible');
+  cerrarDropdown(); searchInput.focus();
+});
+document.addEventListener('click', function(e) {
+  if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) cerrarDropdown();
+});
+
+</script>
+</body>
+</html>
